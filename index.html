@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Arinella Beauty Fest | Pameran Kecantikan Modern untuk Gen Z</title>
+  <!-- Tailwind CSS + Font Awesome + Google Fonts -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <style>
+    * { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; }
+    @keyframes fadeInUp {
+      0% { opacity: 0; transform: translateY(30px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes glowPulse {
+      0% { box-shadow: 0 0 0 0 rgba(255, 105, 180, 0.4); }
+      70% { box-shadow: 0 0 0 12px rgba(255, 105, 180, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(255, 105, 180, 0); }
+    }
+    .animate-fade-up {
+      animation: fadeInUp 0.7s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
+    }
+    .card-transition {
+      transition: all 0.25s ease;
+    }
+    .card-transition:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.15);
+    }
+    input, select, textarea {
+      transition: all 0.2s ease;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: #f472b6;
+      box-shadow: 0 0 0 3px rgba(244, 114, 182, 0.2);
+    }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #fce7f3; }
+    ::-webkit-scrollbar-thumb { background: #f472b6; border-radius: 20px; }
+    /* Container untuk gambar floorplan dengan rasio 1199:668 */
+    .floorplan-container {
+      aspect-ratio: 1199 / 668;
+      width: 100%;
+      overflow: hidden;
+      border-radius: 1.5rem;
+      background: #f8f9fc;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+    .floorplan-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+    .floorplan-container img:hover {
+      transform: scale(1.02);
+    }
+    /* Lightbox overlay styles */
+    .lightbox {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      z-index: 9999;
+      cursor: pointer;
+      justify-content: center;
+      align-items: center;
+    }
+    .lightbox img {
+      max-width: 90%;
+      max-height: 90%;
+      object-fit: contain;
+      border-radius: 8px;
+      box-shadow: 0 0 30px rgba(0,0,0,0.5);
+    }
+    .lightbox.show {
+      display: flex;
+      animation: fadeIn 0.2s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+        /* Tambahan styling untuk ticket benefit */
+    .ticket-card {
+      background: white;
+      border-radius: 2rem;
+      transition: all 0.3s ease;
+    }
+    .ticket-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 25px 35px -12px rgba(0,0,0,0.2);
+    }
+    .benefit-list {
+      list-style-type: none;
+      padding-left: 0;
+    }
+    .benefit-list li {
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+    .benefit-list li i {
+      margin-top: 0.2rem;
+      color: #f472b6;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body class="bg-white text-gray-800">
+
+  <!-- ========== HEADER ========== -->
+  <header class="relative bg-gradient-to-r from-pink-400 via-pink-300 to-sky-300 overflow-hidden">
+    <div class="absolute inset-0 bg-black/5"></div>
+    <div class="relative max-w-7xl mx-auto px-6 py-12 md:py-20 text-center md:text-left md:flex md:justify-between md:items-center">
+      <div class="animate-fade-up">
+        <h1 class="text-5xl md:text-7xl font-extrabold text-white drop-shadow-lg tracking-tight">
+          ARINELLA <span class="text-yellow-200">BEAUTY FEST</span>
+        </h1>
+        <p class="text-white/95 text-xl md:text-2xl mt-3 font-medium italic">Be Bold. Be You. Be Glowing ✨</p>
+        <div class="mt-8 flex flex-wrap gap-4 justify-center md:justify-start">
+          <button onclick="document.getElementById('register').scrollIntoView({behavior:'smooth'})" class="bg-white text-pink-600 font-bold px-8 py-3 rounded-full shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 flex items-center gap-2"><i class="fas fa-ticket-alt"></i> Registrasi Sekarang</button>
+          <button onclick="document.getElementById('event').scrollIntoView({behavior:'smooth'})" class="bg-pink-600/70 backdrop-blur-sm text-white border border-white/50 px-8 py-3 rounded-full font-semibold hover:bg-pink-700 transition-all"><i class="fas fa-calendar-week"></i> Lihat Program</button>
+        </div>
+      </div>
+      <div class="hidden md:block animate-fade-up">
+        <div class="relative w-64 h-64 flex items-center justify-center">
+          <img src="icon.png" alt="Arinella Logo" class="w-full h-auto drop-shadow-2xl transform hover:scale-105 transition-transform duration-500">
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========== NAVBAR STICKY ========== -->
+  <nav class="sticky top-0 z-50 bg-gray-900/90 backdrop-blur-lg border-b border-white/10 shadow-md">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex flex-wrap justify-center gap-4 md:gap-8 text-sm md:text-base font-medium">
+      <a href="#home" class="nav-link text-gray-200 hover:text-pink-300 transition"><i class="fas fa-home mr-1"></i> Home</a>
+      <a href="#about" class="nav-link text-gray-200 hover:text-pink-300 transition"><i class="fas fa-heart mr-1"></i> About</a>
+      <a href="#event" class="nav-link text-gray-200 hover:text-pink-300 transition"><i class="fas fa-calendar-alt mr-1"></i> Event</a>
+      <a href="#exhibitor" class="nav-link text-gray-200 hover:text-pink-300 transition"><i class="fas fa-store mr-1"></i> Exhibitor</a>
+      <a href="#register" class="nav-link text-gray-200 hover:text-pink-300 transition"><i class="fas fa-pen-alt mr-1"></i> Register</a>
+      <a href="#venue" class="nav-link text-gray-200 hover:text-pink-300 transition"><i class="fas fa-map-marker-alt mr-1"></i> Venue</a>
+      <a href="#contact" class="nav-link text-gray-200 hover:text-pink-300 transition"><i class="fas fa-envelope mr-1"></i> Contact</a>
+    </div>
+  </nav>
+
+  <!-- ========== HOMEPAGE section ========== -->
+  <section id="home" class="py-20 bg-gradient-to-br from-pink-50 via-white to-sky-50">
+    <div class="max-w-6xl mx-auto px-5 text-center">
+      <div class="inline-block bg-pink-200 text-pink-800 rounded-full px-5 py-1.5 text-sm font-bold mb-5 animate-fade-up"><i class="fas fa-spa"></i> Pameran Kecantikan Modern & Interaktif</div>
+      <h2 class="text-4xl md:text-5xl font-extrabold text-gray-800 tracking-tight animate-fade-up">Temukan <span class="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-sky-500">Tren Kecantikan</span> Terbaru</h2>
+      <p class="text-gray-600 max-w-2xl mx-auto mt-5 text-lg animate-fade-up delay-100">Ruang bagi beauty enthusiasts untuk mengeksplorasi inovasi produk, talkshow inspiratif, demo makeup, dan pengalaman seru bersama brand ternama.</p>
+      <div class="mt-10 animate-fade-up delay-200">
+        <button onclick="document.getElementById('register').scrollIntoView({behavior:'smooth'})" class="bg-gradient-to-r from-pink-500 to-rose-400 text-white font-bold py-4 px-10 rounded-full shadow-xl hover:scale-105 transition-transform"><i class="fas fa-ticket-alt mr-2"></i> Dapatkan Tiket Early Bird</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== ABOUT US (detail dari PDF) ========== -->
+  <section id="about" class="py-20 bg-white">
+    <div class="max-w-6xl mx-auto px-5">
+      <div class="flex flex-col lg:flex-row gap-12 items-center">
+        <div class="flex-1">
+          <span class="text-pink-500 font-semibold text-sm uppercase tracking-wider"><i class="fas fa-leaf mr-1"></i> About Arinella</span>
+          <h2 class="text-3xl md:text-4xl font-bold mt-2 text-gray-800">Pengalaman Beauty Exhibition <br>Modern & Inspiratif</h2>
+          <p class="text-gray-600 mt-5 leading-relaxed">Arinella Beauty Fest merupakan pameran kecantikan yang menghadirkan pengalaman beauty exhibition modern, interaktif, dan inspiratif. Event ini menjadi ruang bagi para beauty enthusiasts untuk mengeksplorasi tren terbaru, mengenal inovasi produk, serta merasakan langsung perkembangan industri beauty dalam satu tempat.</p>
+          <p class="text-gray-600 mt-4">Selain menghadirkan berbagai brand kecantikan, pengunjung juga dapat menikmati <strong>talkshow, product demo, beauty class, dan kompetisi make-up</strong> yang dirancang untuk memberikan pengalaman seru sekaligus edukatif. Dengan konsep fresh dan aesthetic, Arinella Beauty Fest hadir sebagai destinasi beauty lifestyle yang dekat dengan Generasi Z.</p>
+          <div class="grid grid-cols-2 gap-3 mt-8">
+            <div class="flex items-center gap-2 bg-pink-50 p-3 rounded-xl"><i class="fas fa-check-circle text-pink-500"></i><span>40+ Brand Ternama</span></div>
+            <div class="flex items-center gap-2 bg-pink-50 p-3 rounded-xl"><i class="fas fa-microphone-alt text-pink-500"></i><span>Talkshow Expert</span></div>
+            <div class="flex items-center gap-2 bg-pink-50 p-3 rounded-xl"><i class="fas fa-palette text-pink-500"></i><span>Makeup Competition</span></div>
+            <div class="flex items-center gap-2 bg-pink-50 p-3 rounded-xl"><i class="fas fa-music text-pink-500"></i><span>Live Performance</span></div>
+          </div>
+        </div>
+        <div class="flex-1 flex justify-center">
+          <div class="relative w-72 h-72 md:w-96 md:h-96 rounded-3xl bg-gradient-to-br from-pink-100 to-sky-100 flex items-center justify-center shadow-2xl overflow-hidden">
+            <div class="absolute inset-0 bg-white/20 backdrop-blur-sm"></div>
+            <img src="icon.png" alt="Arinella Icon" class="relative z-10 w-4/5 h-auto drop-shadow-xl transform hover:rotate-2 transition-transform duration-500">
+          </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== EVENT PROGRAM (Day 1,2,3 sesuai PDF) ========== -->
+  <section id="event" class="py-20 bg-gray-50">
+    <div class="max-w-6xl mx-auto px-5">
+      <div class="text-center mb-14">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-800">✨ Event Program & Supporting Events ✨</h2>
+        <p class="text-gray-500 mt-2 max-w-2xl mx-auto">Rangkaian acara inspiratif yang memadukan edukasi, hiburan, dan pengalaman eksklusif</p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-8">
+        <!-- DAY 1 -->
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden card-transition group">
+          <div class="bg-gradient-to-r from-pink-500 to-pink-400 p-5 text-white">
+            <div class="text-2xl font-black">DAY 01</div>
+            <div class="text-sm opacity-90">Beauty Expertise & Special Performance</div>
+          </div>
+          <div class="p-6">
+            <i class="fas fa-brush text-3xl text-pink-500 mb-3"></i>
+            <h3 class="text-xl font-bold">Workshop by Mercia Dewi (Bumiauw)</h3>
+            <p class="text-gray-600 mt-2 text-sm">Workshop eksklusif bersama MUA senior ternama Indonesia. Insight teknik makeup profesional, rahasia makeup tahan lama.</p>
+            <div class="mt-4 border-t pt-3">
+              <p class="font-semibold"><i class="fas fa-microphone-alt text-pink-400"></i> Special Performance:</p>
+              <p class="text-gray-800 font-bold">🎤 Raisa</p>
+              <p class="text-xs text-gray-500">Penampilan spesial solois wanita ternama</p>
+            </div>
+          </div>
+        </div>
+        <!-- DAY 2 -->
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden card-transition group">
+          <div class="bg-gradient-to-r from-sky-500 to-sky-400 p-5 text-white">
+            <div class="text-2xl font-black">DAY 02</div>
+            <div class="text-sm opacity-90">Beauty Talk & Inspiring Night</div>
+          </div>
+          <div class="p-6">
+            <i class="fas fa-chalkboard-user text-3xl text-sky-500 mb-3"></i>
+            <h3 class="text-xl font-bold">Talkshow with dr. Richard Lee</h3>
+            <p class="text-gray-600 mt-2 text-sm">Dokter & entrepreneur bidang kecantikan, founder Athena Group, Goddesskin. Edukasi perawatan kulit, tren skincare, mitos & fakta.</p>
+            <div class="mt-4 border-t pt-3">
+              <p class="font-semibold"><i class="fas fa-music text-sky-400"></i> Performance by:</p>
+              <p class="text-gray-800 font-bold">🎵 Bernadya</p>
+              <p class="text-xs text-gray-500">Penyanyi muda berbakat</p>
+            </div>
+          </div>
+        </div>
+        <!-- DAY 3 -->
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden card-transition group">
+          <div class="bg-gradient-to-r from-purple-500 to-fuchsia-400 p-5 text-white">
+            <div class="text-2xl font-black">DAY 03</div>
+            <div class="text-sm opacity-90">Closing Celebration</div>
+          </div>
+          <div class="p-6">
+            <i class="fas fa-dove text-3xl text-purple-500 mb-3"></i>
+            <h3 class="text-xl font-bold">Grand Finale & Competition Winner</h3>
+            <p class="text-gray-600 mt-2 text-sm">Penutupan meriah dengan pengumuman lomba make-up, fashion showcase, lucky draw.</p>
+            <div class="mt-4 border-t pt-3">
+              <p class="font-semibold"><i class="fas fa-guitar text-purple-400"></i> Special Performance:</p>
+              <p class="text-gray-800 font-bold">🎸 Kahitna</p>
+              <p class="text-xs text-gray-500">Grup musik legendaris Indonesia</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mt-12 text-center text-gray-500 text-sm">📍 Semua rangkaian acara berlangsung di Hall PIM 3, Pondok Indah Mall</div>
+    </div>
+  </section>
+  <!-- ========== TICKET PLANS & BENEFITS (NEW SECTION) ========== -->
+  <section id="ticket-plans" class="py-20 bg-gradient-to-br from-pink-100 via-white to-rose-50">
+    <div class="max-w-6xl mx-auto px-5">
+      <div class="text-center mb-12">
+        <span class="inline-block bg-pink-200 text-pink-800 rounded-full px-5 py-1.5 text-sm font-bold mb-3"><i class="fas fa-ticket-alt mr-1"></i> Pilih Pengalaman Terbaikmu</span>
+        <h2 class="text-3xl md:text-4xl font-extrabold text-gray-800">✨ Tiket & Benefit Eksklusif ✨</h2>
+        <p class="text-gray-500 max-w-2xl mx-auto mt-3">Nikmati keistimewaan yang berbeda di setiap kategori tiket. Pilih sesuai kebutuhan dan dapatkan pengalaman tak terlupakan di Arinella Beauty Fest.</p>
+      </div>
+
+      <div class="grid lg:grid-cols-4 md:grid-cols-2 gap-6">
+        <!-- VIP Glow & Grace Hospitality -->
+        <div class="ticket-card bg-white rounded-3xl shadow-xl overflow-hidden border-2 border-pink-300 relative">
+          <div class="absolute top-4 right-4 bg-pink-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow">Most Exclusive</div>
+          <div class="bg-gradient-to-br from-pink-600 to-rose-500 p-5 text-white text-center">
+            <i class="fas fa-crown text-3xl mb-2"></i>
+            <h3 class="text-xl font-black">VIP Glow & Grace</h3>
+            <p class="text-sm opacity-90">Hospitality Ticket</p>
+            <div class="text-2xl font-extrabold mt-2">Rp 250.000</div>
+          </div>
+          <div class="p-5">
+            <ul class="benefit-list space-y-2 text-sm">
+              <li><i class="fas fa-check-circle text-pink-500"></i> Full 3 Days Access</li>
+              <li><i class="fas fa-chair text-pink-500"></i> Front row seating performance</li>
+              <li><i class="fas fa-paint-brush text-pink-500"></i> 2x Workshop eksklusif</li>
+              <li><i class="fas fa-handshake text-pink-500"></i> Meet & Greet session</li>
+              <li><i class="fas fa-gift text-pink-500"></i> Premium goodie bag (senilai Rp500k+)</li>
+              <li><i class="fas fa-bolt text-pink-500"></i> Fast Track Registration & VIP Lane</li>
+              <li><i class="fas fa-camera text-pink-500"></i> Photobooth VIP lane</li>
+              <li><i class="fas fa-wine-glass-alt text-pink-500"></i> Exclusive Hospitality Lounge</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Regular Beauty Pass (3 Days) -->
+        <div class="ticket-card bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-200">
+          <div class="bg-gradient-to-br from-sky-500 to-blue-400 p-5 text-white text-center">
+            <i class="fas fa-calendar-week text-3xl mb-2"></i>
+            <h3 class="text-xl font-black">Regular Beauty Pass</h3>
+            <p class="text-sm opacity-90">3 Days Pass</p>
+            <div class="text-2xl font-extrabold mt-2">Rp 200.000</div>
+          </div>
+          <div class="p-5">
+            <ul class="benefit-list space-y-2 text-sm">
+              <li><i class="fas fa-check-circle text-sky-500"></i> Exhibition 3 Days</li>
+              <li><i class="fas fa-microphone-alt text-sky-500"></i> Semua Talkshow (free seating)</li>
+              <li><i class="fas fa-chalkboard-teacher text-sky-500"></i> 1x Workshop pilihan</li>
+              <li><i class="fas fa-music text-sky-500"></i> Semua Performances</li>
+              <li><i class="fas fa-gift text-sky-500"></i> Goodie bag eksklusif</li>
+              <li><i class="fas fa-store text-sky-500"></i> Akses ke 40+ booth brand</li>
+              <li><i class="fas fa-bolt text-sky-500"></i> Fast Track Registration</li>
+              <li><i class="fas fa-tshirt text-sky-500"></i> Exclusive Merchandise discount</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Beauty Infinite Live Ticket (Premium Day) -->
+        <div class="ticket-card bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-200">
+          <div class="bg-gradient-to-br from-purple-500 to-fuchsia-400 p-5 text-white text-center">
+            <i class="fas fa-infinity text-3xl mb-2"></i>
+            <h3 class="text-xl font-black">Beauty Infinite Live</h3>
+            <p class="text-sm opacity-90">Premium Day Access</p>
+            <div class="text-2xl font-extrabold mt-2">Rp 150.000</div>
+          </div>
+          <div class="p-5">
+            <ul class="benefit-list space-y-2 text-sm">
+              <li><i class="fas fa-check-circle text-purple-500"></i> Premium Day Access (pilih 1 hari)</li>
+              <li><i class="fas fa-microphone-alt text-purple-500"></i> Akses Talkshow premium seat</li>
+              <li><i class="fas fa-chalkboard-teacher text-purple-500"></i> 1x Workshop premium</li>
+              <li><i class="fas fa-music text-purple-500"></i> Performance area terbaik</li>
+              <li><i class="fas fa-gift text-purple-500"></i> Goodie bag limited edition</li>
+              <li><i class="fas fa-bolt text-purple-500"></i> Fast Track Registration</li>
+              <li><i class="fas fa-camera-retro text-purple-500"></i> Photobooth VIP lane</li>
+              <li><i class="fas fa-dice-d6 text-purple-500"></i> Lucky draw eksklusif</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Regular Day Ticket -->
+        <div class="ticket-card bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-200">
+          <div class="bg-gradient-to-br from-emerald-500 to-teal-400 p-5 text-white text-center">
+            <i class="fas fa-sun text-3xl mb-2"></i>
+            <h3 class="text-xl font-black">Regular Day Ticket</h3>
+            <p class="text-sm opacity-90">1 Hari Akses</p>
+            <div class="text-2xl font-extrabold mt-2">Rp 85.000</div>
+          </div>
+          <div class="p-5">
+            <ul class="benefit-list space-y-2 text-sm">
+              <li><i class="fas fa-check-circle text-emerald-500"></i> Exhibition sesuai hari pilihan</li>
+              <li><i class="fas fa-microphone-alt text-emerald-500"></i> Talkshow (free seating)</li>
+              <li><i class="fas fa-music text-emerald-500"></i> Live performance</li>
+              <li><i class="fas fa-store text-emerald-500"></i> Akses semua booth brand</li>
+              <li><i class="fas fa-gift text-emerald-500"></i> Free goodie bag basic</li>
+              <li><i class="fas fa-ticket-alt text-emerald-500"></i> E-ticket dengan QR Code</li>
+              <li><i class="fas fa-heart text-emerald-500"></i> Pengalaman seru 1 hari penuh</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Informasi tambahan pembelian tiket -->
+      <div class="mt-12 bg-white/70 backdrop-blur-sm rounded-2xl p-6 shadow-md border border-pink-100 text-center max-w-3xl mx-auto">
+        <div class="flex flex-wrap justify-center gap-6 items-center">
+          <div class="flex items-center gap-2"><i class="fas fa-qrcode text-2xl text-pink-500"></i><span class="font-medium">E-ticket + QR Code</span></div>
+          <div class="flex items-center gap-2"><i class="fas fa-credit-card text-2xl text-pink-500"></i><span class="font-medium">Pembayaran Digital</span></div>
+          <div class="flex items-center gap-2"><i class="fas fa-exchange-alt text-2xl text-pink-500"></i><span class="font-medium">Non refundable tapi bisa transfer</span></div>
+        </div>
+        <p class="text-xs text-gray-400 mt-4">*Harga belum termasuk pajak. Tiket terjual tidak dapat dikembalikan. Setelah registrasi, tiket akan dikirim ke email dalam bentuk QR Code.</p>
+      </div>
+    </div>
+  </section>
+  <!-- ========== EXHIBITOR (40+ Brand) ========== -->
+  <section id="exhibitor" class="py-20 bg-white">
+    <div class="max-w-6xl mx-auto px-5">
+      <div class="text-center mb-10">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-800">🌟 40+ Brand & Exhibitors 🌟</h2>
+        <p class="text-gray-500 mt-2">Brand beauty ternama lokal & internasional hadir untukmu</p>
+      </div>
+      <div id="exhibitorList" class="flex flex-wrap justify-center gap-3 md:gap-4"></div>
+      <p class="text-center text-gray-400 text-sm mt-6">dan masih banyak lagi brand eksklusif lainnya ✨</p>
+    </div>
+  </section>
+
+  <!-- ========== REGISTRATION (with QR info & ticket) ========== -->
+  <section id="register" class="py-20 bg-gradient-to-br from-pink-50 via-white to-sky-50">
+    <div class="max-w-5xl mx-auto px-5">
+      <div class="text-center mb-8">
+        <span class="bg-pink-200 text-pink-800 rounded-full px-4 py-1.5 text-sm font-bold"><i class="fas fa-qrcode"></i> Registrasi Digital & E-ticket</span>
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mt-3">Daftar Sekarang, Dapatkan QR Code</h2>
+        <p class="text-gray-500 max-w-xl mx-auto mt-2">Setelah registrasi & pembayaran, kamu akan menerima e-ticket berupa QR code untuk scan di entrance. Praktis & bebas antre!</p>
+      </div>
+
+      <div class="bg-white/70 backdrop-blur-sm rounded-3xl shadow-2xl p-6 md:p-10 border border-white/50">
+        <form id="registrationForm" onsubmit="handleRegistration(event)" class="space-y-6">
+          <div class="grid md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-1"><i class="fas fa-user text-pink-500"></i> Nama Lengkap</label>
+              <input type="text" id="fullname" required placeholder="e.g., Cindy Aulia" class="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:border-pink-400 transition">
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-1"><i class="fas fa-envelope text-pink-500"></i> Email</label>
+              <input type="email" id="email" required placeholder="hello@beauty.com" class="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl transition">
+            </div>
+          </div>
+          <div class="grid md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-1"><i class="fas fa-phone-alt text-pink-500"></i> No. HP</label>
+              <input type="tel" id="phone" required placeholder="+62 812 3456 7890" class="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl">
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-1"><i class="fas fa-ticket-alt text-pink-500"></i> Tipe Tiket</label>
+              <select id="ticketType" class="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl appearance-none cursor-pointer">
+                <option value="VIP Ticket">💎 VIP Glow & Grave Hospitality(All Access + Goodiebag Premium)</option>
+                <option value="Regular 3 Day">🎫 Regular Beauty Pass (3 Days Pass)</option>
+                <option value="Daily Ticket">🌟 Beauty Infinite Live Ticket (Premium Day Access)</option>
+                <option value="Daily Ticket">🌟 Regular Day Ticket (1 Hari)</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1"><i class="fas fa-comment-dots"></i> Catatan (opsional)</label>
+            <textarea rows="2" placeholder="Kebutuhan khusus / alergi / dll" class="w-full px-5 py-3 bg-gray-50 border rounded-2xl"></textarea>
+          </div>
+          <button type="submit" class="w-full bg-gradient-to-r from-pink-500 to-rose-500 text-white font-bold py-4 rounded-2xl shadow-lg hover:shadow-xl transition-all transform hover:scale-[1.01] flex items-center justify-center gap-2 text-lg"><i class="fas fa-check-circle"></i> Registrasi & Dapatkan E-Ticket</button>
+          <p id="regMessage" class="text-center text-green-700 font-medium mt-2"></p>
+        </form>
+        <p class="text-xs text-center text-gray-400 mt-5">*Dengan registrasi, kamu setuju dengan ketentuan event. E-ticket akan dikirim ke email.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== VENUE (Hall PIM 3 + floorplan image dengan rasio 1199:668) ========== -->
+  <section id="venue" class="py-20 bg-white">
+    <div class="max-w-6xl mx-auto px-5">
+      <div class="flex flex-col lg:flex-row gap-12 items-center">
+        <div class="flex-1">
+          <span class="bg-indigo-100 text-indigo-700 rounded-full px-4 py-1 text-sm"><i class="fas fa-building"></i> Lokasi Strategis</span>
+          <h2 class="text-3xl font-bold mt-3">City Hall PIM 3 <br>Pondok Indah Mall</h2>
+          <p class="text-gray-600 mt-4 text-lg">Venue acara berlokasi di <strong>City Hall PIM yang berada di Pondok Indah Mall 3</strong>. Lokasi ini dipilih karena memiliki area luas, fasilitas lengkap, serta akses mudah dijangkau pengunjung.</p>
+          <div class="mt-6 space-y-3">
+            <div class="flex gap-3"><i class="fas fa-map text-pink-500 text-xl"></i><span>Akses MRT Pondok Indah, tersedia area parkir luas</span></div>
+            <div class="flex gap-3"><i class="fas fa-wheelchair text-pink-500 text-xl"></i><span>Fasilitas difabel & jalur khusus</span></div>
+            <div class="flex gap-3"><i class="fas fa-calendar-alt text-pink-500 text-xl"></i><span>Tanggal: 10-12 April 2026 | 10:00 - 22:00 WIB</span></div>
+          </div>
+          <button onclick="window.open('https://maps.google.com/?q=Pondok+Indah+Mall+3+Jakarta','_blank')" class="mt-6 bg-gray-800 text-white px-6 py-3 rounded-xl flex gap-2 items-center hover:bg-pink-600 transition"><i class="fab fa-google"></i> Buka Google Maps</button>
+        </div>
+        
+        <div class="flex-1 bg-gradient-to-br from-pink-50 to-sky-50 p-6 rounded-2xl shadow-xl">
+          <!-- 
+            IMAGE FLOORPLAN DENGAN RASIO 1199:668
+            Ganti nama file gambar sesuai dengan file yang diupload pada direktori yang sama.
+            Contoh: "floorplan-arinella.png" atau "venue-map.jpg"
+            Pastikan gambar memiliki rasio asli 1199:668 agar tampil sempurna tanpa distorsi.
+          -->
+        <div class="floorplan-container mb-4 cursor-pointer" onclick="openLightbox()">
+          <img src="floorplan-1199x668.png" alt="Denah Venue Arinella Beauty Fest - Floor Plan Hall PIM 3" 
+              id="floorplanImg"
+              onerror="this.onerror=null; this.src='./floor-venue.png'; console.warn('Ganti dengan file floorplan asli di direktori yang sama (rasio 1199:668)')">
+        </div>
+        <p class="text-xs text-center text-gray-400 mt-1 cursor-pointer" onclick="openLightbox()">🔍 Klik gambar untuk memperbesar</p>
+          <h3 class="font-bold text-xl text-center mt-2"><i class="fas fa-map-marked-alt text-pink-500"></i> Floor Plan Venue</h3>
+          <div class="bg-white p-4 rounded-xl mt-3 shadow-inner">
+            <div class="grid grid-cols-3 gap-2 text-xs text-gray-500">
+              <div class="border p-2 text-center">Main Stage</div>
+              <div class="border p-2 text-center">Talk Show Area</div>
+              <div class="border p-2 text-center">Workshop Zone</div>
+              <div class="border p-2 text-center">Exhibitor Booths</div>
+              <div class="border p-2 text-center">Product Demo</div>
+              <div class="border p-2 text-center">Registrasi & QR Scan</div>
+            </div>
+            <p class="text-sm text-gray-600 mt-3 text-center">📍 Layout memudahkan navigasi ke seluruh booth dan area kegiatan.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== CONTACT US (dengan form pesan terintegrasi) ========== -->
+  <section id="contact" class="py-20 bg-gray-50">
+    <div class="max-w-6xl mx-auto px-5">
+      <div class="text-center mb-10">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-800">📞 Contact Us</h2>
+        <p class="text-gray-500">Media komunikasi resmi untuk exhibitor, pengunjung, & mitra kerja sama</p>
+      </div>
+      <div class="grid md:grid-cols-2 gap-10">
+        <div class="bg-white rounded-2xl shadow-lg p-7">
+          <div class="space-y-5">
+            <div class="flex items-center gap-4"><i class="fas fa-envelope text-2xl text-pink-500 w-8"></i><div><p class="font-bold">Email Resmi</p><a href="mailto:info@arinellabeautyfest.id" class="text-pink-600">info@arinellabeautyfest.id</a></div></div>
+            <div class="flex items-center gap-4"><i class="fas fa-phone-alt text-2xl text-pink-500 w-8"></i><div><p class="font-bold">Telepon</p><p>+62 21 5080 1234</p></div></div>
+            <div class="flex items-center gap-4"><i class="fab fa-instagram text-2xl text-pink-500 w-8"></i><div><p class="font-bold">Instagram</p><p>@arinellabeautyfest</p></div></div>
+            <div class="flex items-center gap-4"><i class="fab fa-tiktok text-2xl text-pink-500 w-8"></i><div><p class="font-bold">TikTok</p><p>@arinella.fest</p></div></div>
+          </div>
+        </div>
+        <div class="bg-white rounded-2xl shadow-lg p-7">
+          <h3 class="text-xl font-bold mb-4"><i class="fas fa-paper-plane"></i> Kirim Pesan ke Panitia</h3>
+          <form id="contactForm" onsubmit="handleContact(event)">
+            <input type="text" placeholder="Nama Anda" id="contactName" required class="w-full mb-3 p-3 bg-gray-50 border rounded-xl">
+            <input type="email" placeholder="Email" id="contactEmail" required class="w-full mb-3 p-3 bg-gray-50 border rounded-xl">
+            <textarea rows="3" placeholder="Tulis pesan Anda..." id="contactMsg" required class="w-full mb-3 p-3 bg-gray-50 border rounded-xl"></textarea>
+            <button type="submit" class="bg-pink-500 text-white font-semibold py-2 px-6 rounded-xl hover:bg-pink-600 transition">Kirim Pesan</button>
+            <p id="contactFeedback" class="text-green-600 text-sm mt-2"></p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="bg-gray-900 text-gray-300 py-8">
+    <div class="max-w-6xl mx-auto px-5 flex flex-col md:flex-row justify-between items-center">
+      <div class="text-center md:text-left">
+        <h3 class="text-2xl font-bold text-white">ARINELLA BEAUTY FEST</h3>
+        <p class="text-sm">© 2026 • Be Bold. Be You. Be Glowing</p>
+      </div>
+      <div class="flex gap-6 text-xl mt-4 md:mt-0">
+        <i class="fab fa-instagram hover:text-pink-400 cursor-pointer"></i>
+        <i class="fab fa-twitter hover:text-pink-400 cursor-pointer"></i>
+        <i class="fab fa-youtube hover:text-pink-400 cursor-pointer"></i>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function handleRegistration(e) {
+      e.preventDefault();
+      const name = document.getElementById('fullname').value.trim();
+      if(!name) return;
+      const msgDiv = document.getElementById('regMessage');
+      msgDiv.innerHTML = '<span class="text-green-600 font-semibold"><i class="fas fa-qrcode"></i> Registrasi berhasil! E-ticket dengan QR Code akan dikirim ke email Anda. Selamat datang di Arinella Beauty Fest!</span>';
+      document.getElementById('registrationForm').reset();
+      setTimeout(() => msgDiv.innerHTML = '', 5000);
+    }
+    function handleContact(e) {
+      e.preventDefault();
+      const feedback = document.getElementById('contactFeedback');
+      feedback.innerHTML = '<i class="fas fa-check-circle"></i> Pesan terkirim! Tim kami akan segera merespon.';
+      document.getElementById('contactForm').reset();
+      setTimeout(() => feedback.innerHTML = '', 4000);
+    }
+    // Intersection observer untuk subtle fade
+    const sections = document.querySelectorAll('section');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, { threshold: 0.1 });
+    sections.forEach(s => {
+      s.style.opacity = '0';
+      s.style.transform = 'translateY(20px)';
+      s.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+      observer.observe(s);
+    });
+    function openLightbox() {
+      const img = document.getElementById('floorplanImg');
+      const lightbox = document.getElementById('lightbox');
+      const lightboxImg = document.getElementById('lightboxImg');
+
+      lightboxImg.src = img.src;
+      lightbox.classList.add('show');
+    }
+
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('show');
+    }
+    const exhibitors = [
+      "Wardah","Make Over","Emina","Somethinc","Avoskin","Scarlett",
+      "Dear Me Beauty","Rose All Day","ESQA","Timephoria",
+      "Luxcrime","Dior","Estée Lauder","BLP","Y.O.U","Kahf",
+      "Fenty Beauty","Clinique","Guele","Kiehl's",
+      "L'Oréal Paris","Maybelline","The Body Shop","Innisfree",
+      "Laneige","SK-II","Huda Beauty","Sephora","NARS",
+      "MAC Cosmetics","Yves Saint Laurent","Bobbi Brown",
+      "Mineral Botanica","Studio Tropik","Whitelab","COSRX",
+      "Azarine","Chanel Beauty","Nature Republic","MOP"
+    ];
+
+    const colors = [
+      "pink","rose","green","blue","purple","amber",
+      "indigo","fuchsia","sky","cyan","lime","orange",
+      "teal","violet","stone","gray"
+    ];
+
+    const container = document.getElementById("exhibitorList");
+
+    exhibitors.forEach((brand, i) => {
+      const color = colors[i % colors.length];
+
+      const span = document.createElement("span");
+      span.className = `bg-${color}-100 text-${color}-800 px-5 py-2.5 rounded-full text-sm font-semibold shadow-sm`;
+      span.textContent = brand;
+
+      container.appendChild(span);
+    });
+  </script>
+  <!-- Lightbox overlay -->
+  <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+    <img id="lightboxImg" src="" alt="Floor Plan Preview">
+  </div>
+</body>
+</html>
